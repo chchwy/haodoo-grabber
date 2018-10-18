@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::buttonClicked);
     mGrabber = new HaodooGrabber;
-    mGrabber->grabListFromCategory();
+    mGrabber->grab100best();
 }
 
 MainWindow::~MainWindow()

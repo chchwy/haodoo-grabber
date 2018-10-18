@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets network
+QT       += core gui widgets network xml
 
 TARGET = haodoo-grabber
 TEMPLATE = app

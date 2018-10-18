@@ -3,7 +3,22 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QVector>
 
+class HaodooLinks
+{
+    static QVector<QString> get100best()
+    {
+        return QVector<QString>
+        {
+            "http://www.haodoo.net/?M=hd&P=100-1",
+            "http://www.haodoo.net/?M=hd&P=100-2",
+            "http://www.haodoo.net/?M=hd&P=100-3",
+            "http://www.haodoo.net/?M=hd&P=100-4",
+            "http://www.haodoo.net/?M=hd&P=100-5",
+        };
+    }
+};
 
 class HaodooGrabber : public QObject
 {
@@ -12,7 +27,11 @@ public:
     HaodooGrabber();
     ~HaodooGrabber();
 
-    void grabListFromCategory();
+    //
+    void grab100best();
+
+    void grabBookListFromCategory(QString linkUrl);
+    void parseCategoryHtml(QString htmlFile);
 
 public slots:
     void networkFinished(QNetworkReply*);
@@ -22,7 +41,9 @@ public slots:
     void requestError(QNetworkReply::NetworkError);
     void requestSSLErrors(QList<QSslError>);
 
+
 private:
     QNetworkAccessManager* mNetworkManager = nullptr;
+    bool mIsSendingNetworkRequest = false;
 };
 
