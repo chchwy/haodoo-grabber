@@ -5,3 +5,5 @@ release
 *.pro.user
 *.vcxproj.filters
 *.sln
+.vs
+ui_*.h

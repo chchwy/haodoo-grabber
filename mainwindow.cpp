@@ -8,11 +8,18 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    HaodooGrabber haodoo;
-    haodoo.grabListFromCategory();
+    //connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::buttonClicked);
+    mGrabber = new HaodooGrabber;
+    mGrabber->grabListFromCategory();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete mGrabber;
+}
+
+void MainWindow::buttonClicked()
+{
+
 }
