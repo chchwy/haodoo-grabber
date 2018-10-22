@@ -3,6 +3,11 @@
 #include <QFile>
 #include <QDomDocument>
 
+QString baseUrl()
+{
+    return "http://www.haodoo.net/";
+}
+
 HaodooGrabber::HaodooGrabber() : QObject()
 {
     mNetworkManager = new QNetworkAccessManager(this);
@@ -18,6 +23,7 @@ HaodooGrabber::~HaodooGrabber()
 
 void HaodooGrabber::grab100best()
 {
+    mLinks.clear();
     grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-1");
 }
 
@@ -39,7 +45,7 @@ void HaodooGrabber::grabBookListFromCategory(QString linkUrl)
     connect(reply, &QNetworkReply::sslErrors, this, &HaodooGrabber::requestSSLErrors);
 }
 
-void HaodooGrabber::parseCategoryHtml(QString htmlFile)
+QStringList HaodooGrabber::parseCategoryHtml(QString htmlFile)
 {
     QFile fin(htmlFile);
     if (!fin.open(QFile::ReadOnly | QFile::Text))
@@ -68,24 +74,33 @@ void HaodooGrabber::parseCategoryHtml(QString htmlFile)
             bookLines.append(line);
     }
 
+    QStringList links;
+
     for (QString s : bookLines)
     {
         int iStart = s.indexOf("<a");
         int iEnd = s.indexOf("</a>");
 
-        QString sub = s.mid(iStart, iEnd - iStart + 4);
-        sub.replace("class=s", "");
+        QString aTagNoClass = s.mid(iStart, iEnd - iStart + 4);
+        aTagNoClass.replace("class=s", "");
         
-        iStart = sub.indexOf("href=");
-        QString sub2 = sub.mid(iStart);
-        qDebug() << sub2;
+        iStart = aTagNoClass.indexOf("href=");
+        QString aTagHref = aTagNoClass.mid(iStart);
+        //qDebug() << aTagHref;
 
-        int firstQuote = sub2.indexOf("\"");
-        int secondQuote = sub2.indexOf("\"", firstQuote + 1);
+        int firstQuote = aTagHref.indexOf("\"");
+        int secondQuote = aTagHref.indexOf("\"", firstQuote + 1);
 
-        QString sub3 = sub2.mid(firstQuote + 1, secondQuote - firstQuote - 1);
-        qDebug() << sub3;
+        QString aTagLink = aTagHref.mid(firstQuote + 1, secondQuote - firstQuote - 1);
+        //qDebug() << aTagLink;
+        links.append(aTagLink);
     }
+
+    for (QString& oneLink : links)
+    {
+        oneLink = (baseUrl() + oneLink);
+    }
+    return links;
 }
 
 void HaodooGrabber::networkFinished(QNetworkReply* reply)
@@ -104,7 +119,11 @@ void HaodooGrabber::networkFinished(QNetworkReply* reply)
 
     reply->deleteLater();
 
-    parseCategoryHtml("catetory.html");
+    mLinks = parseCategoryHtml("catetory.html");
+    for (QString oneLink : mLinks)
+    {
+        qDebug() << oneLink;
+    }
 }
 
 void HaodooGrabber::networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible)

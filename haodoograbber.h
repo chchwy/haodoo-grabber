@@ -4,6 +4,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QVector>
+#include <QStringList>
+
 
 class HaodooLinks
 {
@@ -31,7 +33,7 @@ public:
     void grab100best();
 
     void grabBookListFromCategory(QString linkUrl);
-    void parseCategoryHtml(QString htmlFile);
+    QStringList parseCategoryHtml(QString htmlFile);
 
 public slots:
     void networkFinished(QNetworkReply*);
@@ -45,5 +47,7 @@ public slots:
 private:
     QNetworkAccessManager* mNetworkManager = nullptr;
     bool mIsSendingNetworkRequest = false;
+
+    QStringList mLinks;
 };
 
