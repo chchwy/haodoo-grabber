@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::buttonClicked);
+    connect(ui->goBookButton, &QPushButton::clicked, this, &MainWindow::goBookButtonClicked);
     mGrabber = new HaodooGrabber;
     mGrabber->grab100best();
 }
@@ -19,7 +19,7 @@ MainWindow::~MainWindow()
     delete mGrabber;
 }
 
-void MainWindow::buttonClicked()
+void MainWindow::goBookButtonClicked()
 {
-
+    mGrabber->parseLinks();
 }

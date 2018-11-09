@@ -8,6 +8,11 @@ QString baseUrl()
     return "http://www.haodoo.net/";
 }
 
+void HaodooGrabber::parseLinks()
+{
+    throw std::logic_error("The method or operation is not implemented.");
+}
+
 HaodooGrabber::HaodooGrabber() : QObject()
 {
     mNetworkManager = new QNetworkAccessManager(this);
@@ -25,6 +30,10 @@ void HaodooGrabber::grab100best()
 {
     mLinks.clear();
     grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-1");
+    grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-2");
+    grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-3");
+    grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-4");
+    grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-5");
 }
 
 void HaodooGrabber::grabBookListFromCategory(QString linkUrl)
@@ -47,14 +56,7 @@ void HaodooGrabber::grabBookListFromCategory(QString linkUrl)
 
 QStringList HaodooGrabber::parseCategoryHtml(QString htmlFile)
 {
-    QFile fin(htmlFile);
-    if (!fin.open(QFile::ReadOnly | QFile::Text))
-    {
-        qDebug() << "Cannot open the file";
-    }
-
-    QString rawContent = QString::fromUtf8(fin.readAll());
-
+    QString rawContent = htmlFile;
     QVector<QString> bookLines;
 
     bool inScriptTag = false;
@@ -76,7 +78,7 @@ QStringList HaodooGrabber::parseCategoryHtml(QString htmlFile)
 
     QStringList links;
 
-    for (QString s : bookLines)
+    for (const QString& s : bookLines)
     {
         int iStart = s.indexOf("<a");
         int iEnd = s.indexOf("</a>");
@@ -108,22 +110,18 @@ void HaodooGrabber::networkFinished(QNetworkReply* reply)
     auto content = QString::fromUtf8(reply->readAll());
     //qDebug() << content;
 
-    QFile f("catetory.html");
-    if (f.open(QFile::WriteOnly | QFile::Text))
+    if (reply->url().toString().contains("M=hd"))
     {
-        QTextStream sout(&f);
-        sout.setCodec("UTF-8");
-        sout << content;
-    }
-    f.close();
+        qDebug() << "It's a category!";
+        QStringList newLinks = parseCategoryHtml(content);
+        mLinks.append(newLinks);
 
+        for (const QString& l : newLinks)
+        {
+            qDebug() << l;
+        }
+    }
     reply->deleteLater();
-
-    mLinks = parseCategoryHtml("catetory.html");
-    for (QString oneLink : mLinks)
-    {
-        qDebug() << oneLink;
-    }
 }
 
 void HaodooGrabber::networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible)

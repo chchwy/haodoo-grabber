@@ -5,6 +5,7 @@
 #include <QNetworkReply>
 #include <QVector>
 #include <QStringList>
+#include <QTimer>
 
 
 class HaodooLinks
@@ -26,6 +27,7 @@ class HaodooGrabber : public QObject
 {
     Q_OBJECT
 public:
+    void parseLinks();
     HaodooGrabber();
     ~HaodooGrabber();
 
@@ -47,6 +49,8 @@ public slots:
 private:
     QNetworkAccessManager* mNetworkManager = nullptr;
     bool mIsSendingNetworkRequest = false;
+
+    QTimer* mTimer = nullptr;
 
     QStringList mLinks;
 };
