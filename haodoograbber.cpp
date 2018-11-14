@@ -1,24 +1,24 @@
 #include "haodoograbber.h"
 #include <QUrlQuery>
 #include <QFile>
-#include <QDomDocument>
+#include <QXmlStreamReader>
+#include <QDataStream>
 
 QString baseUrl()
 {
     return "http://www.haodoo.net/";
 }
 
-void HaodooGrabber::parseLinks()
-{
-    throw std::logic_error("The method or operation is not implemented.");
-}
-
 HaodooGrabber::HaodooGrabber() : QObject()
 {
     mNetworkManager = new QNetworkAccessManager(this);
-
     connect(mNetworkManager, &QNetworkAccessManager::finished, this, &HaodooGrabber::networkFinished);
     connect(mNetworkManager, &QNetworkAccessManager::networkAccessibleChanged, this, &HaodooGrabber::networkAccessibleChanged);
+
+    mTimer = new QTimer(this);
+    mTimer->setTimerType(Qt::VeryCoarseTimer);
+    connect(mTimer, &QTimer::timeout, this, &HaodooGrabber::timerTick);
+    mTimer->start(1000);
 }
 
 HaodooGrabber::~HaodooGrabber()
@@ -28,18 +28,18 @@ HaodooGrabber::~HaodooGrabber()
 
 void HaodooGrabber::grab100best()
 {
-    mLinks.clear();
-    grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-1");
-    grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-2");
-    grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-3");
-    grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-4");
-    grabBookListFromCategory("http://www.haodoo.net/?M=hd&P=100-5");
+    //mLinks.clear();
+    //mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-1");
+    //mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-2");
+    //mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-3");
+    //mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-4");
+    //mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-5");
+
+    mBookPageLinks.append("http://www.haodoo.net/?M=book&P=394");
 }
 
-void HaodooGrabber::grabBookListFromCategory(QString linkUrl)
+void HaodooGrabber::sendWebRequest(QString linkUrl)
 {
-    mIsSendingNetworkRequest = true;
-
     QUrl url(linkUrl);
 
     QNetworkRequest req;
@@ -56,75 +56,58 @@ void HaodooGrabber::grabBookListFromCategory(QString linkUrl)
 
 QStringList HaodooGrabber::parseCategoryHtml(QString htmlFile)
 {
-    QString rawContent = htmlFile;
+    const QString& rawContent = htmlFile;
     QVector<QString> bookLines;
 
-    bool inScriptTag = false;
-    QTextStream sin(&rawContent);
-    while (!sin.atEnd())
-    {
-        QString line = sin.readLine();
-        //qDebug() << "Line:" << line;
+    HtmlParser htmlParser(rawContent);
+    return htmlParser.linksToBookPage();
+}
 
-        if (line.startsWith("<!DOCTYPE")) { continue; }
-        if (line.startsWith("<script")) { inScriptTag = true; continue; }
-        if (line.startsWith("</script")) { inScriptTag = false; continue; }
+Book HaodooGrabber::parseBookPageHtml(QString htmlFile)
+{
+    const QString& rawContent = htmlFile;
+    QVector<QString> bookLines;
 
-        if (inScriptTag) continue;
-
-        if (line.contains("?M=book"))
-            bookLines.append(line);
-    }
-
-    QStringList links;
-
-    for (const QString& s : bookLines)
-    {
-        int iStart = s.indexOf("<a");
-        int iEnd = s.indexOf("</a>");
-
-        QString aTagNoClass = s.mid(iStart, iEnd - iStart + 4);
-        aTagNoClass.replace("class=s", "");
-        
-        iStart = aTagNoClass.indexOf("href=");
-        QString aTagHref = aTagNoClass.mid(iStart);
-        //qDebug() << aTagHref;
-
-        int firstQuote = aTagHref.indexOf("\"");
-        int secondQuote = aTagHref.indexOf("\"", firstQuote + 1);
-
-        QString aTagLink = aTagHref.mid(firstQuote + 1, secondQuote - firstQuote - 1);
-        //qDebug() << aTagLink;
-        links.append(aTagLink);
-    }
-
-    for (QString& oneLink : links)
-    {
-        oneLink = (baseUrl() + oneLink);
-    }
-    return links;
+    HtmlParser htmlParser(rawContent);
+    return htmlParser.linksToEbookFiles();
 }
 
 void HaodooGrabber::networkFinished(QNetworkReply* reply)
 {
-    auto content = QString::fromUtf8(reply->readAll());
-    //qDebug() << content;
-
-    if (reply->url().toString().contains("M=hd"))
+    QString urlString = reply->url().toString();
+    
+    if (urlString.contains("M=hd"))
     {
-        qDebug() << "It's a category!";
+        auto content = QString::fromUtf8(reply->readAll());
+        qDebug() << "It's a category! [" << urlString << "]";
         QStringList newLinks = parseCategoryHtml(content);
-        mLinks.append(newLinks);
 
-        for (const QString& l : newLinks)
-        {
-            qDebug() << l;
-        }
+        mtx.lock();
+        mBookPageLinks.append(newLinks);
+        mtx.unlock();
     }
+    else if (urlString.contains("M=book"))
+    {
+        auto content = QString::fromUtf8(reply->readAll());
+        qDebug() << "It's a book [" << urlString << "]";
+        Book book = parseBookPageHtml(content);
+        qDebug() << book.title << book.epubLink << book.prcLink;
+        m
+    }
+    else if (urlString.contains("?M=d&P="))
+    {
+        auto content = reply->readAll();
+
+        QFile file("");
+        file.open(QIODevice::WriteOnly);
+        QDataStream fout(&file);
+        fout << content;
+    }
+
     reply->deleteLater();
 }
 
-void HaodooGrabber::networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible)
+void HaodooGrabber::networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility)
 {
     qDebug() << "Accessible changed";
 }
@@ -142,4 +125,32 @@ void HaodooGrabber::requestError(QNetworkReply::NetworkError)
 void HaodooGrabber::requestSSLErrors(QList<QSslError>)
 {
     qDebug() << "Request SSL Errors";
+}
+
+void HaodooGrabber::timerTick()
+{
+    mtx.lock();
+    if (mCategoryLinks.isEmpty() == false)
+    {
+        QString url = mCategoryLinks.takeFirst();
+        sendWebRequest(url);
+    }
+    mtx.unlock();
+
+    mtx.lock();
+    if (mBookPageLinks.isEmpty() == false)
+    {
+        QString url = mBookPageLinks.takeFirst();
+        sendWebRequest(url);
+    }
+    mtx.unlock();
+
+    mtx.lock();
+    if (mBooks.isEmpty() == false)
+    {
+        Book b = mBooks.takeFirst();
+        sendWebRequest(b.prcLink);
+        sendWebRequest(b.epubLink);
+    }
+    mtx.unlock();
 }

@@ -16,6 +16,9 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QListWidget" name="listWidget"/>
+    </item>
+    <item>
      <widget class="QPushButton" name="goBookButton">
       <property name="text">
        <string>Go Book</string>

@@ -6,36 +6,24 @@
 #include <QVector>
 #include <QStringList>
 #include <QTimer>
+#include <mutex>
+#include <QMap>
+#include "htmlparser.h"
 
-
-class HaodooLinks
-{
-    static QVector<QString> get100best()
-    {
-        return QVector<QString>
-        {
-            "http://www.haodoo.net/?M=hd&P=100-1",
-            "http://www.haodoo.net/?M=hd&P=100-2",
-            "http://www.haodoo.net/?M=hd&P=100-3",
-            "http://www.haodoo.net/?M=hd&P=100-4",
-            "http://www.haodoo.net/?M=hd&P=100-5",
-        };
-    }
-};
 
 class HaodooGrabber : public QObject
 {
     Q_OBJECT
 public:
-    void parseLinks();
     HaodooGrabber();
     ~HaodooGrabber();
 
     //
     void grab100best();
-
-    void grabBookListFromCategory(QString linkUrl);
+    void sendWebRequest(QString linkUrl);
+    
     QStringList parseCategoryHtml(QString htmlFile);
+    Book parseBookPageHtml(QString htmlFile);
 
 public slots:
     void networkFinished(QNetworkReply*);
@@ -45,13 +33,18 @@ public slots:
     void requestError(QNetworkReply::NetworkError);
     void requestSSLErrors(QList<QSslError>);
 
+    void timerTick();
 
 private:
     QNetworkAccessManager* mNetworkManager = nullptr;
-    bool mIsSendingNetworkRequest = false;
 
     QTimer* mTimer = nullptr;
+    std::mutex mtx;
 
-    QStringList mLinks;
+    QStringList mCategoryLinks;
+    QStringList mBookPageLinks;
+
+    QVector<Book> mBooks;
+    QMap<QString, QString> mBookIDTitleMap;
 };
 

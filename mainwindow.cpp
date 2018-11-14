@@ -21,5 +21,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::goBookButtonClicked()
 {
-    mGrabber->parseLinks();
+    //mGrabber->parseLinks();
 }

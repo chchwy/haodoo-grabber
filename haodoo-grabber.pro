@@ -24,11 +24,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    haodoograbber.cpp
+    haodoograbber.cpp \
+    htmlparser.cpp
 
 HEADERS += \
     mainwindow.h \
-    haodoograbber.h
+    haodoograbber.h \
+    htmlparser.h
 
 FORMS += \
     mainwindow.ui
