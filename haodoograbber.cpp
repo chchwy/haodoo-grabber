@@ -4,10 +4,6 @@
 #include <QXmlStreamReader>
 #include <QDataStream>
 
-QString baseUrl()
-{
-    return "http://www.haodoo.net/";
-}
 
 HaodooGrabber::HaodooGrabber() : QObject()
 {
@@ -18,7 +14,10 @@ HaodooGrabber::HaodooGrabber() : QObject()
     mTimer = new QTimer(this);
     mTimer->setTimerType(Qt::VeryCoarseTimer);
     connect(mTimer, &QTimer::timeout, this, &HaodooGrabber::timerTick);
-    mTimer->start(5000);
+    mTimer->start(1000);
+
+    // for debugging
+    //mBookPageLinks.append("http://www.haodoo.net/?M=book&P=1132");
 }
 
 HaodooGrabber::~HaodooGrabber()
@@ -36,6 +35,8 @@ void HaodooGrabber::grabBooksFromCategory(const QStringList& urls)
 
 void HaodooGrabber::sendWebRequest(QString linkUrl)
 {
+    if (linkUrl.isEmpty()) return;
+
     QUrl url(linkUrl);
 
     QNetworkRequest req;
@@ -109,7 +110,7 @@ void HaodooGrabber::networkFinished(QNetworkReply* reply)
             file.write(content);
         }
         file.close();
-        qDebug() << "Downloaded [" << fileName << "]";
+        qDebug() << "Downloaded [" << fileName << "] from " << urlString;
         emit bookDownloaded(fileName);
     }
     else 

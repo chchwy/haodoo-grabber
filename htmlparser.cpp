@@ -92,18 +92,26 @@ void HtmlParser::extractBookTitle()
 {
     QString setTitle("SetTitle(\"");
     int begin = mContent.indexOf(setTitle);
-    if (begin < 0)
+    if (begin > -1)
     {
-        qDebug() << "Book title not found.";
-        invalidBook();
-        return;
+        begin += setTitle.length();
+        int end = mContent.indexOf('"', begin);
+        QString title = mContent.mid(begin, end - begin).trimmed();
+        mBook.title = title;
     }
-    begin += setTitle.length();
+    else 
+    {
+        // alternative way
+        int end = mContent.indexOf("<input type=\"button\"");
+        if (end > 0)
+        {
+            int begin = mContent.lastIndexOf("<font ", end);
+            QString titleWithHtml = mContent.mid(begin, end - begin);
 
-    int end = mContent.indexOf('"', begin);
-
-    QString title = mContent.mid(begin, end - begin).trimmed();
-    mBook.title = title;
+            mBook.title = stripHtmlTags(titleWithHtml);
+            //qDebug() << "extract title:" << mBook.title;
+        }
+    }
 }
 
 bool HtmlParser::extractEBookFileLinks()
@@ -141,4 +149,26 @@ void HtmlParser::invalidBook()
     mBook.id = "";
     mBook.epubLink = "";
     mBook.prcLink = "";
+}
+
+QString HtmlParser::stripHtmlTags(const QString& str)
+{
+    QString result;
+    bool skipping = false;
+    for (int i = 0; i < str.length(); ++i)
+    {
+        if (str.at(i) == QChar('<'))
+        {
+            skipping = true;
+        }
+
+        if (!skipping)
+            result.append(str.at(i));
+
+        if (str.at(i) == QChar('>'))
+        {
+            skipping = false;
+        }
+    }
+    return result;
 }

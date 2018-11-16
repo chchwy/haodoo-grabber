@@ -34,6 +34,8 @@ private:
     bool extractEBookFileLinks();
 
     void invalidBook();
+    QString stripHtmlTags(const QString& str);
+
 
     QString mContent;
     QStringList mLinks;
