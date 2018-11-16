@@ -34,6 +34,18 @@ void MainWindow::best100ButtonClicked()
     mGrabber->grabBooksFromCategory(best100);
 }
 
+void MainWindow::wisdomButtonClicked()
+{
+    ui->logWidget->addItem(QString::fromUtf8("開始解析: 隨身智囊"));
+    
+    QStringList urlList;
+    for (int i = 1; i <= 6; ++i)
+    {
+        urlList.append(QString("http://www.haodoo.net/?M=hd&P=wisdom-%1").arg(i));
+    }
+    mGrabber->grabBooksFromCategory(urlList);
+}
+
 void MainWindow::oneBookDownloaded(QString bookName)
 {
     ui->logWidget->addItem(bookName);

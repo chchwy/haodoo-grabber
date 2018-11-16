@@ -18,6 +18,7 @@ public:
     ~MainWindow();
 
     void best100ButtonClicked();
+    void wisdomButtonClicked();
 
     void oneBookDownloaded(QString bookName);
 private:

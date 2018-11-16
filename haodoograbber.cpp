@@ -34,18 +34,6 @@ void HaodooGrabber::grabBooksFromCategory(const QStringList& urls)
     }
 }
 
-void HaodooGrabber::grab100best()
-{
-    //mLinks.clear();
-    mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-1");
-    mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-2");
-    mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-3");
-    mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-4");
-    mCategoryLinks.append("http://www.haodoo.net/?M=hd&P=100-5");
-
-    //mBookPageLinks.append("http://www.haodoo.net/?M=book&P=394");
-}
-
 void HaodooGrabber::sendWebRequest(QString linkUrl)
 {
     QUrl url(linkUrl);
