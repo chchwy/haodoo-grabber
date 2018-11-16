@@ -14,13 +14,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->openFolderButton, &QPushButton::clicked, this, &MainWindow::browseDestFolder);
     connect(ui->best100Button, &QPushButton::clicked, this, &MainWindow::best100ButtonClicked);
     connect(ui->wisdomButton, &QPushButton::clicked, this, &MainWindow::wisdomButtonClicked);
+    connect(ui->historyButton, &QPushButton::clicked, this, &MainWindow::historyButtonClicked);
+    connect(ui->wushaButton, &QPushButton::clicked, this, &MainWindow::wushaButtonClicked);
 
     mGrabber = new HaodooGrabber;
     connect(mGrabber, &HaodooGrabber::bookDownloaded, this, &MainWindow::oneBookDownloaded);
 
     QSettings settings("haodoo-gragger.ini", QSettings::IniFormat);
     QString lastDestFolder = settings.value("DestFolder").toString();
-    ui->DestLineEdit->setText(lastDestFolder);
+    ui->destLineEdit->setText(lastDestFolder);
     mGrabber->setDestFolder(lastDestFolder);
 }
 
@@ -35,7 +37,7 @@ void MainWindow::browseDestFolder()
     QString s = QFileDialog::getExistingDirectory(this, "下載目錄");
     if (!s.isEmpty())
     {
-        ui->DestLineEdit->setText(s);
+        ui->destLineEdit->setText(s);
         mGrabber->setDestFolder(s);
 
         QSettings settings("haodoo-gragger.ini", QSettings::IniFormat);
@@ -62,9 +64,31 @@ void MainWindow::wisdomButtonClicked()
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 隨身智囊"));
     
     QStringList urlList;
-    for (int i = 1; i <= 1; ++i)
+    for (int i = 1; i <= 6; ++i)
     {
         urlList.append(QString("http://www.haodoo.net/?M=hd&P=wisdom-%1").arg(i));
+    }
+    mGrabber->grabBooksFromCategory(urlList);
+}
+
+void MainWindow::historyButtonClicked()
+{
+    ui->logWidget->addItem(QString::fromUtf8("開始解析: 歷史煙雲"));
+    QStringList urlList;
+    for (int i = 1; i <= 3; ++i)
+    {
+        urlList.append(QString("http://www.haodoo.net/?M=hd&P=history-%1").arg(i));
+    }
+    mGrabber->grabBooksFromCategory(urlList);
+}
+
+void MainWindow::wushaButtonClicked()
+{
+    ui->logWidget->addItem(QString::fromUtf8("開始解析: 武俠小說"));
+    QStringList urlList;
+    for (int i = 1; i <= 10; ++i)
+    {
+        urlList.append(QString("http://www.haodoo.net/?M=hd&P=martial-%1").arg(i));
     }
     mGrabber->grabBooksFromCategory(urlList);
 }

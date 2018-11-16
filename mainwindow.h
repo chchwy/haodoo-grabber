@@ -20,6 +20,8 @@ public:
     void browseDestFolder();
     void best100ButtonClicked();
     void wisdomButtonClicked();
+    void historyButtonClicked();
+    void wushaButtonClicked();
 
     void oneBookDownloaded(QString bookName);
 private:

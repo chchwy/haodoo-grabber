@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>好讀抓書</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -21,7 +21,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="QLineEdit" name="DestLineEdit">
+       <widget class="QLineEdit" name="destLineEdit">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -50,6 +50,20 @@
      <widget class="QPushButton" name="wisdomButton">
       <property name="text">
        <string>隨身智囊</string>
+      </property>
+     </widget>
+    </item>
+	 <item>
+     <widget class="QPushButton" name="historyButton">
+      <property name="text">
+       <string>歷史煙雲</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="wushaButton">
+      <property name="text">
+       <string>武俠小說</string>
       </property>
      </widget>
     </item>
