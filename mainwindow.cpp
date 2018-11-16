@@ -9,7 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->best100Button, &QPushButton::clicked, this, &MainWindow::best100ButtonClicked);
-    
+    connect(ui->wisdomButton, &QPushButton::clicked, this, &MainWindow::wisdomButtonClicked);
+
     mGrabber = new HaodooGrabber;
     connect(mGrabber, &HaodooGrabber::bookDownloaded, this, &MainWindow::oneBookDownloaded);
 }
@@ -48,5 +49,5 @@ void MainWindow::wisdomButtonClicked()
 
 void MainWindow::oneBookDownloaded(QString bookName)
 {
-    ui->logWidget->addItem(bookName);
+    ui->logWidget->addItem("下載: " + bookName);
 }

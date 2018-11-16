@@ -14,7 +14,7 @@ QStringList HtmlParser::linksToBookPage()
     QStringList actualBookLinks;
     for (const QString& s : mLinks)
     {
-        if (s.contains("M=book"))
+        if (s.contains("?M=book") || s.contains("?M=Share"))
         {
             actualBookLinks.append("http://www.haodoo.net/" + s);
         }
@@ -92,6 +92,12 @@ void HtmlParser::extractBookTitle()
 {
     QString setTitle("SetTitle(\"");
     int begin = mContent.indexOf(setTitle);
+    if (begin < 0)
+    {
+        qDebug() << "Book title not found.";
+        invalidBook();
+        return;
+    }
     begin += setTitle.length();
 
     int end = mContent.indexOf('"', begin);
@@ -100,12 +106,19 @@ void HtmlParser::extractBookTitle()
     mBook.title = title;
 }
 
-void HtmlParser::extractEBookFileLinks()
+bool HtmlParser::extractEBookFileLinks()
 {
     const QString pattern = "http://www.haodoo.net/?M=d&P=%1.%2";
 
     QString downloadPrc("DownloadPrc('");
     int begin = mContent.indexOf(downloadPrc);
+    if (begin < 0)
+    {
+        qDebug() << "No epub/prc links in this page";
+        invalidBook();
+        return false;
+    }
+
     begin += downloadPrc.length();
 
     QString endQuote(')');
@@ -118,4 +131,14 @@ void HtmlParser::extractEBookFileLinks()
     mBook.id = bookID;
     mBook.epubLink = EPUBLink;
     mBook.prcLink = PRCLink;
+
+    return true;
+}
+
+void HtmlParser::invalidBook()
+{
+    mBook.title = "";
+    mBook.id = "";
+    mBook.epubLink = "";
+    mBook.prcLink = "";
 }

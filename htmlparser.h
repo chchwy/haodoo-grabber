@@ -10,6 +10,11 @@ struct Book
     QString title;
     QString prcLink;
     QString epubLink;
+
+    bool valid()
+    {
+        return (!prcLink.isEmpty() && !epubLink.isEmpty());
+    }
 };
 
 
@@ -26,7 +31,9 @@ private:
     void extractBodyTag();
     void extractHyperLinks();
     void extractBookTitle();
-    void extractEBookFileLinks();
+    bool extractEBookFileLinks();
+
+    void invalidBook();
 
     QString mContent;
     QStringList mLinks;

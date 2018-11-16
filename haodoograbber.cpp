@@ -82,15 +82,18 @@ void HaodooGrabber::networkFinished(QNetworkReply* reply)
         mBookPageLinks.append(newLinks);
         mtx.unlock();
     }
-    else if (urlString.contains("M=book"))
+    else if (urlString.contains("M=book") || urlString.contains("M=Share"))
     {
         auto content = QString::fromUtf8(reply->readAll());
         qDebug() << "It's a book [" << urlString << "]";
         Book book = parseBookPageHtml(content);
 
-        mtx.lock();
-        mBooks.append(book);
-        mtx.unlock();
+        if (book.valid())
+        {
+            mtx.lock();
+            mBooks.append(book);
+            mtx.unlock();
+        }
         //qDebug() << book.title << book.epubLink << book.prcLink;
         
     }
@@ -108,6 +111,10 @@ void HaodooGrabber::networkFinished(QNetworkReply* reply)
         file.close();
         qDebug() << "Downloaded [" << fileName << "]";
         emit bookDownloaded(fileName);
+    }
+    else 
+    {
+        qDebug() << "Can't recognize the url:" << urlString;
     }
 
     reply->deleteLater();
