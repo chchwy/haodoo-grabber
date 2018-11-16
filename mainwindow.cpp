@@ -8,9 +8,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->goBookButton, &QPushButton::clicked, this, &MainWindow::goBookButtonClicked);
+    connect(ui->best100Button, &QPushButton::clicked, this, &MainWindow::best100ButtonClicked);
+    
     mGrabber = new HaodooGrabber;
-    mGrabber->grab100best();
+    connect(mGrabber, &HaodooGrabber::bookDownloaded, this, &MainWindow::oneBookDownloaded);
 }
 
 MainWindow::~MainWindow()
@@ -19,7 +20,13 @@ MainWindow::~MainWindow()
     delete mGrabber;
 }
 
-void MainWindow::goBookButtonClicked()
+void MainWindow::best100ButtonClicked()
 {
-    //mGrabber->parseLinks();
+    ui->logWidget->addItem(QString::fromUtf8("開始解析: 世紀百強"));
+    mGrabber->grab100best();
+}
+
+void MainWindow::oneBookDownloaded(QString bookName)
+{
+    ui->logWidget->addItem(bookName);
 }

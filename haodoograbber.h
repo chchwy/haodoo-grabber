@@ -25,6 +25,9 @@ public:
     QStringList parseCategoryHtml(QString htmlFile);
     Book parseBookPageHtml(QString htmlFile);
 
+signals:
+    void bookDownloaded(QString);
+
 public slots:
     void networkFinished(QNetworkReply*);
     void networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible);
@@ -35,6 +38,8 @@ public slots:
 
     void timerTick();
 
+    QString getBookFileNameFromLink(QString link);
+
 private:
     QNetworkAccessManager* mNetworkManager = nullptr;
 
@@ -44,7 +49,7 @@ private:
     QStringList mCategoryLinks;
     QStringList mBookPageLinks;
 
-    QVector<Book> mBooks;
-    QMap<QString, QString> mBookIDTitleMap;
+    QList<Book> mBooks;
+    QList<Book> mDownloadedBook;
 };
 

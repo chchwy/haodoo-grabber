@@ -16,12 +16,12 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QListWidget" name="listWidget"/>
+     <widget class="QListWidget" name="logWidget"/>
     </item>
     <item>
-     <widget class="QPushButton" name="goBookButton">
+     <widget class="QPushButton" name="best100Button">
       <property name="text">
-       <string>Go Book</string>
+       <string>世紀百強</string>
       </property>
      </widget>
     </item>

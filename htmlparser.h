@@ -6,6 +6,7 @@
 
 struct Book
 {
+    QString id;
     QString title;
     QString prcLink;
     QString epubLink;

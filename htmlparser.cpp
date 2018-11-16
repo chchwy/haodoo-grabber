@@ -97,8 +97,6 @@ void HtmlParser::extractBookTitle()
     int end = mContent.indexOf('"', begin);
 
     QString title = mContent.mid(begin, end - begin).trimmed();
-    //qDebug() << title;
-
     mBook.title = title;
 }
 
@@ -113,15 +111,11 @@ void HtmlParser::extractEBookFileLinks()
     QString endQuote(')');
     int end = mContent.indexOf(endQuote, begin);
 
-    QString bookID = mContent.mid(begin, end - begin - 1);
-    //qDebug() << "PRC:" << bookID;
+    const QString bookID = mContent.mid(begin, end - begin - 1);
+    const QString PRCLink = QString(pattern).arg(bookID).arg("prc");
+    const QString EPUBLink = QString(pattern).arg(bookID).arg("epub");
 
-    QString PRCLink = QString(pattern).arg(bookID).arg("prc");
-    //qDebug() << PRCLink;
-
-    QString EPUBLink = QString(pattern).arg(bookID).arg("epub");
-    //qDebug()
-
+    mBook.id = bookID;
     mBook.epubLink = EPUBLink;
     mBook.prcLink = PRCLink;
 }

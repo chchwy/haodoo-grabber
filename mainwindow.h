@@ -17,7 +17,9 @@ public:
     explicit MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
-    void goBookButtonClicked();
+    void best100ButtonClicked();
+
+    void oneBookDownloaded(QString bookName);
 private:
     Ui::MainWindow *ui;
 
