@@ -11,3 +11,5 @@ ui_*.h
 *.epub
 *.prc
 *.mobi
+
+*.ini
