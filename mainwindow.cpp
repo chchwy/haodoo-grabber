@@ -23,7 +23,15 @@ MainWindow::~MainWindow()
 void MainWindow::best100ButtonClicked()
 {
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 世紀百強"));
-    mGrabber->grab100best();
+    QStringList best100 =
+    {
+        "http://www.haodoo.net/?M=hd&P=100-1",
+        "http://www.haodoo.net/?M=hd&P=100-2",
+        "http://www.haodoo.net/?M=hd&P=100-3",
+        "http://www.haodoo.net/?M=hd&P=100-4",
+        "http://www.haodoo.net/?M=hd&P=100-5",
+    };
+    mGrabber->grabBooksFromCategory(best100);
 }
 
 void MainWindow::oneBookDownloaded(QString bookName)

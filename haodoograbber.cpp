@@ -26,6 +26,14 @@ HaodooGrabber::~HaodooGrabber()
     delete mNetworkManager;
 }
 
+void HaodooGrabber::grabBooksFromCategory(const QStringList& urls)
+{
+    for (const QString& s : urls)
+    {
+        mCategoryLinks.append(s);
+    }
+}
+
 void HaodooGrabber::grab100best()
 {
     //mLinks.clear();

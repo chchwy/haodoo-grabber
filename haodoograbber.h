@@ -19,6 +19,7 @@ public:
     ~HaodooGrabber();
 
     //
+    void grabBooksFromCategory(const QStringList& urls);
     void grab100best();
     void sendWebRequest(QString linkUrl);
     
