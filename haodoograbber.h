@@ -18,6 +18,8 @@ public:
     HaodooGrabber();
     ~HaodooGrabber();
 
+    void setDestFolder(QString sDest) { mDestFolder = sDest; }
+
     //
     void grabBooksFromCategory(const QStringList& urls);
     void sendWebRequest(QString linkUrl);
@@ -41,6 +43,8 @@ public slots:
     QString getBookFileNameFromLink(QString link);
 
 private:
+    QString mDestFolder;
+
     QNetworkAccessManager* mNetworkManager = nullptr;
 
     QTimer* mTimer = nullptr;

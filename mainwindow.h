@@ -17,6 +17,7 @@ public:
     explicit MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
+    void browseDestFolder();
     void best100ButtonClicked();
     void wisdomButtonClicked();
 

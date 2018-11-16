@@ -1,9 +1,6 @@
 #include "haodoograbber.h"
-#include <QUrlQuery>
 #include <QFile>
-#include <QXmlStreamReader>
-#include <QDataStream>
-
+#include <QDir>
 
 HaodooGrabber::HaodooGrabber() : QObject()
 {
@@ -104,7 +101,8 @@ void HaodooGrabber::networkFinished(QNetworkReply* reply)
 
         QString fileName = getBookFileNameFromLink(urlString);
 
-        QFile file(fileName);
+        QString fullPath = QDir(mDestFolder).filePath(fileName);
+        QFile file(fullPath);
         if (file.open(QIODevice::WriteOnly))
         {
             file.write(content);
