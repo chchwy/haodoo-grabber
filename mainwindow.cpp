@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->wisdomButton, &QPushButton::clicked, this, &MainWindow::wisdomButtonClicked);
     connect(ui->historyButton, &QPushButton::clicked, this, &MainWindow::historyButtonClicked);
     connect(ui->wushaButton, &QPushButton::clicked, this, &MainWindow::wushaButtonClicked);
+    connect(ui->mysteryButton, &QPushButton::clicked, this, &MainWindow::mysteryButtonClicked);
 
     mGrabber = new HaodooGrabber;
     connect(mGrabber, &HaodooGrabber::bookDownloaded, this, &MainWindow::oneBookDownloaded);
@@ -47,6 +48,7 @@ void MainWindow::browseDestFolder()
 
 void MainWindow::best100ButtonClicked()
 {
+    ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 世紀百強"));
     QStringList best100 =
     {
@@ -61,6 +63,7 @@ void MainWindow::best100ButtonClicked()
 
 void MainWindow::wisdomButtonClicked()
 {
+    ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 隨身智囊"));
     
     QStringList urlList;
@@ -73,6 +76,7 @@ void MainWindow::wisdomButtonClicked()
 
 void MainWindow::historyButtonClicked()
 {
+    ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 歷史煙雲"));
     QStringList urlList;
     for (int i = 1; i <= 3; ++i)
@@ -84,11 +88,25 @@ void MainWindow::historyButtonClicked()
 
 void MainWindow::wushaButtonClicked()
 {
+    ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 武俠小說"));
     QStringList urlList;
     for (int i = 1; i <= 10; ++i)
     {
         urlList.append(QString("http://www.haodoo.net/?M=hd&P=martial-%1").arg(i));
+    }
+    mGrabber->grabBooksFromCategory(urlList);
+}
+
+void MainWindow::mysteryButtonClicked()
+{
+    // http://www.haodoo.net/?M=hd&P=mystery-1
+    ui->logWidget->clear();
+    ui->logWidget->addItem(QString::fromUtf8("開始解析: 懸疑小說"));
+    QStringList urlList;
+    for (int i = 1; i <= 5; ++i)
+    {
+        urlList.append(QString("http://www.haodoo.net/?M=hd&P=mystery-%1").arg(i));
     }
     mGrabber->grabBooksFromCategory(urlList);
 }

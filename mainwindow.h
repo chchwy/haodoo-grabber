@@ -22,6 +22,7 @@ public:
     void wisdomButtonClicked();
     void historyButtonClicked();
     void wushaButtonClicked();
+    void mysteryButtonClicked();
 
     void oneBookDownloaded(QString bookName);
 private:
