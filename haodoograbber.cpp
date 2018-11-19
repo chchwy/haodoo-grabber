@@ -11,7 +11,7 @@ HaodooGrabber::HaodooGrabber() : QObject()
     mTimer = new QTimer(this);
     mTimer->setTimerType(Qt::VeryCoarseTimer);
     connect(mTimer, &QTimer::timeout, this, &HaodooGrabber::timerTick);
-    mTimer->start(1000);
+    mTimer->start(2000);
 
     // for debugging
     //mBookPageLinks.append("http://www.haodoo.net/?M=book&P=1132");

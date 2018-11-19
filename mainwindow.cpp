@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->historyButton, &QPushButton::clicked, this, &MainWindow::historyButtonClicked);
     connect(ui->wushaButton, &QPushButton::clicked, this, &MainWindow::wushaButtonClicked);
     connect(ui->mysteryButton, &QPushButton::clicked, this, &MainWindow::mysteryButtonClicked);
+    connect(ui->novelButton, &QPushButton::clicked, this, &MainWindow::novelButtonClicked);
 
     mGrabber = new HaodooGrabber;
     connect(mGrabber, &HaodooGrabber::bookDownloaded, this, &MainWindow::oneBookDownloaded);
@@ -107,6 +108,19 @@ void MainWindow::mysteryButtonClicked()
     for (int i = 1; i <= 5; ++i)
     {
         urlList.append(QString("http://www.haodoo.net/?M=hd&P=mystery-%1").arg(i));
+    }
+    mGrabber->grabBooksFromCategory(urlList);
+}
+
+void MainWindow::novelButtonClicked()
+{
+    //http://www.haodoo.net/?M=hd&P=fiction-1
+    ui->logWidget->clear();
+    ui->logWidget->addItem(QString::fromUtf8("開始解析: 小說園地"));
+    QStringList urlList;
+    for (int i = 1; i <= 7; ++i)
+    {
+        urlList.append(QString("http://www.haodoo.net/?M=hd&P=fiction-%1").arg(i));
     }
     mGrabber->grabBooksFromCategory(urlList);
 }

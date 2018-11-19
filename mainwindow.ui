@@ -74,6 +74,13 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QPushButton" name="novelButton">
+      <property name="text">
+       <string>小說園地</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
