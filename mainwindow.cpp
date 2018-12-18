@@ -39,7 +39,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::browseDestFolder()
 {
-    QString s = QFileDialog::getExistingDirectory(this, "下載目錄");
+    QSettings settings("haodoo-gragger.ini", QSettings::IniFormat);
+    QString lastDestFolder = settings.value("DestFolder").toString();
+
+    QString s = QFileDialog::getExistingDirectory(this, "下載目錄", lastDestFolder);
     if (!s.isEmpty())
     {
         ui->destLineEdit->setText(s);
