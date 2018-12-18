@@ -23,9 +23,12 @@ public:
     void historyButtonClicked();
     void wushaButtonClicked();
     void mysteryButtonClicked();
+    void romanceButtonClicked();
     void novelButtonClicked();
 
     void oneBookDownloaded(QString bookName);
+    void onError5Throw(QString errorStr);
+
 private:
     Ui::MainWindow *ui;
 

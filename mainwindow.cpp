@@ -17,10 +17,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->historyButton, &QPushButton::clicked, this, &MainWindow::historyButtonClicked);
     connect(ui->wushaButton, &QPushButton::clicked, this, &MainWindow::wushaButtonClicked);
     connect(ui->mysteryButton, &QPushButton::clicked, this, &MainWindow::mysteryButtonClicked);
+    connect(ui->romanceButton, &QPushButton::clicked, this, &MainWindow::romanceButtonClicked);
     connect(ui->novelButton, &QPushButton::clicked, this, &MainWindow::novelButtonClicked);
 
     mGrabber = new HaodooGrabber;
     connect(mGrabber, &HaodooGrabber::bookDownloaded, this, &MainWindow::oneBookDownloaded);
+    connect(mGrabber, &HaodooGrabber::errorThrow, this, &MainWindow::onErrorThrow);
 
     QSettings settings("haodoo-gragger.ini", QSettings::IniFormat);
     QString lastDestFolder = settings.value("DestFolder").toString();
@@ -125,7 +127,25 @@ void MainWindow::novelButtonClicked()
     mGrabber->grabBooksFromCategory(urlList);
 }
 
+void MainWindow::romanceButtonClicked()
+{
+    //http://www.haodoo.net/?M=hd&P=fiction-1
+    ui->logWidget->clear();
+    ui->logWidget->addItem(QString::fromUtf8("開始解析: 言情小說"));
+    QStringList urlList;
+    for (int i = 1; i <= 6; ++i)
+    {
+        urlList.append(QString("http://www.haodoo.net/?M=hd&P=romance-%1").arg(i));
+    }
+    mGrabber->grabBooksFromCategory(urlList);
+}
+
 void MainWindow::oneBookDownloaded(QString bookName)
 {
     ui->logWidget->addItem("下載: " + bookName);
+}
+
+void MainWindow::onErrorThrow(QString errorStr)
+{
+    ui->logWidget->addItem("錯誤: " + errorStr);
 }

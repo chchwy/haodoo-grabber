@@ -1,90 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>400</width>
-    <height>300</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>好讀抓書</string>
-  </property>
-  <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="bottomMargin">
-       <number>5</number>
-      </property>
-      <item>
-       <widget class="QLineEdit" name="destLineEdit">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="openFolderButton">
-        <property name="text">
-         <string>Browse...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QListWidget" name="logWidget"/>
-    </item>
-    <item>
-     <widget class="QPushButton" name="best100Button">
-      <property name="text">
-       <string>世紀百強</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="wisdomButton">
-      <property name="text">
-       <string>隨身智囊</string>
-      </property>
-     </widget>
-    </item>
-	 <item>
-     <widget class="QPushButton" name="historyButton">
-      <property name="text">
-       <string>歷史煙雲</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="wushaButton">
-      <property name="text">
-       <string>武俠小說</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="mysteryButton">
-      <property name="text">
-       <string>懸疑小說</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="novelButton">
-      <property name="text">
-       <string>小說園地</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+  <class>MainWindow</class>
+  <widget class="QMainWindow" name="MainWindow">
+    <property name="geometry">
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>400</width>
+        <height>300</height>
+      </rect>
+    </property>
+    <property name="windowTitle">
+      <string>好讀抓書</string>
+    </property>
+    <widget class="QWidget" name="centralWidget">
+      <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="bottomMargin">
+              <number>5</number>
+            </property>
+            <item>
+              <widget class="QLineEdit" name="destLineEdit">
+                <property name="readOnly">
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item>
+              <widget class="QPushButton" name="openFolderButton">
+                <property name="text">
+                  <string>Browse...</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
+        </item>
+        <item>
+          <widget class="QListWidget" name="logWidget"/>
+        </item>
+        <item>
+          <widget class="QPushButton" name="best100Button">
+            <property name="text">
+              <string>世紀百強</string>
+            </property>
+          </widget>
+        </item>
+        <item>
+          <widget class="QPushButton" name="wisdomButton">
+            <property name="text">
+              <string>隨身智囊</string>
+            </property>
+          </widget>
+        </item>
+        <item>
+          <widget class="QPushButton" name="historyButton">
+            <property name="text">
+              <string>歷史煙雲</string>
+            </property>
+          </widget>
+        </item>
+        <item>
+          <widget class="QPushButton" name="wushaButton">
+            <property name="text">
+              <string>武俠小說</string>
+            </property>
+          </widget>
+        </item>
+        <item>
+          <widget class="QPushButton" name="mysteryButton">
+            <property name="text">
+              <string>懸疑小說</string>
+            </property>
+          </widget>
+        </item>
+        <item>
+          <widget class="QPushButton" name="romanceButton">
+            <property name="text">
+              <string>言情小說</string>
+            </property>
+          </widget>
+        </item>
+        <item>
+          <widget class="QPushButton" name="novelButton">
+            <property name="text">
+              <string>小說園地</string>
+            </property>
+          </widget>
+        </item>
+      </layout>
+    </widget>
   </widget>
- </widget>
- <layoutdefault spacing="6" margin="6"/>
- <resources/>
- <connections/>
+  <layoutdefault spacing="6" margin="6"/>
+  <resources/>
+  <connections/>
 </ui>

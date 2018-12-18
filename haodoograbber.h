@@ -29,6 +29,7 @@ public:
 
 signals:
     void bookDownloaded(QString);
+    void errorThrow(QString);
 
 public slots:
     void networkFinished(QNetworkReply*);

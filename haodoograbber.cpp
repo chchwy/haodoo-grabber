@@ -1,4 +1,4 @@
-#include "haodoograbber.h"
+﻿#include "haodoograbber.h"
 #include <QFile>
 #include <QDir>
 
@@ -101,7 +101,17 @@ void HaodooGrabber::networkFinished(QNetworkReply* reply)
 
         QString fileName = getBookFileNameFromLink(urlString);
 
-        QString fullPath = QDir(mDestFolder).filePath(fileName);
+        QDir destDir(mDestFolder);
+        if (!destDir.exists())
+        {
+            bool ok = destDir.mkpath(".");
+            if (!ok)
+            {
+                emit errorThrow(QString("無法建立目錄 %1").arg(mDestFolder));
+            }
+        }
+
+        QString fullPath = destDir.filePath(fileName);
         QFile file(fullPath);
         if (file.open(QIODevice::WriteOnly))
         {
