@@ -82,6 +82,13 @@
           </widget>
         </item>
         <item>
+          <widget class="QPushButton" name="scifiButton">
+            <property name="text">
+              <string>奇幻小說</string>
+            </property>
+          </widget>
+        </item>
+        <item>
           <widget class="QPushButton" name="novelButton">
             <property name="text">
               <string>小說園地</string>

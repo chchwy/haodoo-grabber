@@ -24,10 +24,13 @@ public:
     void wushaButtonClicked();
     void mysteryButtonClicked();
     void romanceButtonClicked();
+    void scifiButtonClicked();
     void novelButtonClicked();
 
     void oneBookDownloaded(QString bookName);
-    void onError5Throw(QString errorStr);
+    void onErrorThrow(QString errorStr);
+
+    bool checkDestFolderExists();
 
 private:
     Ui::MainWindow *ui;

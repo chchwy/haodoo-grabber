@@ -19,6 +19,7 @@ public:
     ~HaodooGrabber();
 
     void setDestFolder(QString sDest) { mDestFolder = sDest; }
+    bool checkDestFolderExists();
 
     //
     void grabBooksFromCategory(const QStringList& urls);

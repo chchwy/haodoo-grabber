@@ -22,6 +22,12 @@ HaodooGrabber::~HaodooGrabber()
     delete mNetworkManager;
 }
 
+bool HaodooGrabber::checkDestFolderExists()
+{
+    QDir dir(mDestFolder);
+    return dir.exists();
+}
+
 void HaodooGrabber::grabBooksFromCategory(const QStringList& urls)
 {
     for (const QString& s : urls)

@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->wushaButton, &QPushButton::clicked, this, &MainWindow::wushaButtonClicked);
     connect(ui->mysteryButton, &QPushButton::clicked, this, &MainWindow::mysteryButtonClicked);
     connect(ui->romanceButton, &QPushButton::clicked, this, &MainWindow::romanceButtonClicked);
+    connect(ui->scifiButton, &QPushButton::clicked, this, &MainWindow::scifiButtonClicked);
     connect(ui->novelButton, &QPushButton::clicked, this, &MainWindow::novelButtonClicked);
 
     mGrabber = new HaodooGrabber;
@@ -51,6 +52,8 @@ void MainWindow::browseDestFolder()
 
 void MainWindow::best100ButtonClicked()
 {
+    if (!checkDestFolderExists()) return;
+
     ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 世紀百強"));
     QStringList best100 =
@@ -66,6 +69,8 @@ void MainWindow::best100ButtonClicked()
 
 void MainWindow::wisdomButtonClicked()
 {
+    if (!checkDestFolderExists()) return;
+
     ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 隨身智囊"));
     
@@ -79,6 +84,8 @@ void MainWindow::wisdomButtonClicked()
 
 void MainWindow::historyButtonClicked()
 {
+    if (!checkDestFolderExists()) return;
+
     ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 歷史煙雲"));
     QStringList urlList;
@@ -91,6 +98,8 @@ void MainWindow::historyButtonClicked()
 
 void MainWindow::wushaButtonClicked()
 {
+    if (!checkDestFolderExists()) return;
+
     ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 武俠小說"));
     QStringList urlList;
@@ -103,6 +112,8 @@ void MainWindow::wushaButtonClicked()
 
 void MainWindow::mysteryButtonClicked()
 {
+    if (!checkDestFolderExists()) return;
+
     // http://www.haodoo.net/?M=hd&P=mystery-1
     ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 懸疑小說"));
@@ -116,6 +127,8 @@ void MainWindow::mysteryButtonClicked()
 
 void MainWindow::novelButtonClicked()
 {
+    if (!checkDestFolderExists()) return;
+
     //http://www.haodoo.net/?M=hd&P=fiction-1
     ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 小說園地"));
@@ -129,13 +142,28 @@ void MainWindow::novelButtonClicked()
 
 void MainWindow::romanceButtonClicked()
 {
-    //http://www.haodoo.net/?M=hd&P=fiction-1
+    if (!checkDestFolderExists()) return;
+
     ui->logWidget->clear();
     ui->logWidget->addItem(QString::fromUtf8("開始解析: 言情小說"));
     QStringList urlList;
     for (int i = 1; i <= 6; ++i)
     {
         urlList.append(QString("http://www.haodoo.net/?M=hd&P=romance-%1").arg(i));
+    }
+    mGrabber->grabBooksFromCategory(urlList);
+}
+
+void MainWindow::scifiButtonClicked()
+{
+    if (!checkDestFolderExists()) return;
+
+    ui->logWidget->clear();
+    ui->logWidget->addItem(QString::fromUtf8("開始解析: 奇幻小說"));
+    QStringList urlList;
+    for (int i = 1; i <= 10; ++i)
+    {
+        urlList.append(QString("http://www.haodoo.net/?M=hd&P=scifi-%1").arg(i));
     }
     mGrabber->grabBooksFromCategory(urlList);
 }
@@ -148,4 +176,15 @@ void MainWindow::oneBookDownloaded(QString bookName)
 void MainWindow::onErrorThrow(QString errorStr)
 {
     ui->logWidget->addItem("錯誤: " + errorStr);
+}
+
+bool MainWindow::checkDestFolderExists()
+{
+    bool exists = mGrabber->checkDestFolderExists();
+    if (!exists) 
+    {
+        ui->logWidget->clear();
+        ui->logWidget->addItem("錯誤: 下載目錄不存在!");
+    }
+    return exists;
 }
